@@ -13,7 +13,7 @@
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp" >
+        android:paddingRight="20dp">
 
         <EditText
             android:id="@+id/name"
@@ -22,20 +22,7 @@
             android:layout_marginBottom="10dp"
             android:background="@color/input_register_bg"
             android:hint="@string/hint_name"
-            android:padding="10dp"
-            android:singleLine="true"
             android:inputType="textCapWords"
-            android:textColor="@color/input_register"
-            android:textColorHint="@color/input_register_hint" />
-
-        <EditText
-            android:id="@+id/email"
-            android:layout_width="fill_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="10dp"
-            android:background="@color/input_register_bg"
-            android:hint="@string/hint_email"
-            android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
             android:textColor="@color/input_register"
@@ -55,6 +42,15 @@
             android:textColorHint="@color/input_register_hint" />
 
         <!-- Login Button -->
+
+        <Button
+            android:id="@+id/btnFace"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/btn_login_bg"
+            android:text="Upload Your Picture"
+            android:textColor="@color/bg_login" />
 
         <Button
             android:id="@+id/btnRegister"

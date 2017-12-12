@@ -9,19 +9,19 @@
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="362dp"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="20dp"
-        android:paddingRight="20dp" >
+        android:paddingRight="20dp">
 
         <EditText
-            android:id="@+id/email"
+            android:id="@+id/Name"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="10dp"
             android:background="@color/white"
-            android:hint="@string/hint_email"
+            android:hint="@string/hint_name"
             android:inputType="textEmailAddress"
             android:padding="10dp"
             android:singleLine="true"
@@ -53,6 +53,15 @@
             android:textColor="@color/btn_login" />
 
         <!-- Link to Login Screen -->
+
+        <Button
+            android:id="@+id/btnFaceLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dip"
+            android:background="@color/btn_login_bg"
+            android:text="Face Login"
+            android:textColor="@color/btn_login" />
 
         <Button
             android:id="@+id/btnLinkToRegisterScreen"
