@@ -1,37 +1,35 @@
 package com.example.pyk.multimedia;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Button;
-import android.widget.TextView;
+import android.widget.ArrayAdapter;
+import android.widget.Spinner;
 
-public class MainActivity extends AppCompatActivity {
+/**
+ * Created by pyk on 12/26/17.
+ */
 
+public class NewDiaryActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_main);
+        setContentView(R.layout.activity_newdiary);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-//        getSupportActionBar().setTitle('Q');
+        //set mood list ( spinner list item )
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.btn_newdiary);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-                Intent i = new Intent(getApplicationContext(), NewDiaryActivity.class);
-                startActivity(i);
-            }
-        });
+        String[] str_mood = {"Anger", "Contempt", "Disgust", "Fear", "Happiness", "Sadness", "Surprise", "Neutral"};
+//        super.onCreate(savedInstanceState);
+//        setContentView(R.layout.activity_main);
+        Spinner spinner_mood = (Spinner) findViewById(R.id.spinner_mood);
+        spinner_mood.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, str_mood));
+
+        String[] str_weather = {"Sunny", "Cloudy", "Windy", "Rainy"};
+        Spinner spinner_weather = (Spinner) findViewById(R.id.spinner_weather);
+        spinner_weather.setAdapter(new ArrayAdapter<>(this, android.R.layout.simple_spinner_item, str_weather));
     }
 
     @Override
@@ -55,7 +53,4 @@ public class MainActivity extends AppCompatActivity {
 
         return super.onOptionsItemSelected(item);
     }
-
-
-
 }
