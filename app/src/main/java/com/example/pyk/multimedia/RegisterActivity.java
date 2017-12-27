@@ -115,8 +115,9 @@ public class RegisterActivity extends AppCompatActivity {
         if(resultCode != RESULT_CANCELED) {
             if (requestCode == 1887) {
                 Bitmap image = (Bitmap) data.getExtras().get("data");
+                Bitmap resized_image = Bitmap.createScaledBitmap(image, 180, 120, true);
                 ImageView imageview = (ImageView) findViewById(R.id.img_face); //sets imageview as the bitmap
-                imageview.setImageBitmap(image);
+                imageview.setImageBitmap(resized_image);
             }
         }
     }
