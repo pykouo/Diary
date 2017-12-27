@@ -3,8 +3,10 @@ package com.example.pyk.multimedia;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.TextView;
 
 public class LoginActivity extends AppCompatActivity {
 
@@ -31,7 +33,14 @@ public class LoginActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                // get name
+                TextView text_name = (TextView) findViewById(R.id.Name);
+                String name = text_name.getText().toString();
+
+                // get password
+                TextView text_pwd = (TextView) findViewById(R.id.password);
+                String pwd = text_pwd.getText().toString();
+
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             }
