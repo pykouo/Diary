@@ -44,8 +44,10 @@
         <!-- Login Button -->
         <ImageView
             android:id="@+id/img_face"
-            android:layout_width="match_parent"
-            android:layout_height="119dp" />
+            android:layout_width="102dp"
+            android:layout_height="109dp"
+            android:layout_marginLeft="120dp"
+            android:adjustViewBounds="false" />
 
         <Button
             android:id="@+id/btn_camera"

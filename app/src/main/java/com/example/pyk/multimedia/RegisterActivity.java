@@ -54,18 +54,20 @@ public class RegisterActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View view) {
-                //利用intent去開啟android本身的照相介面
-                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
-                //設定圖片的儲存位置，以及檔名
-                File tmpFile = new File(Environment.getExternalStorageDirectory(), "image.jpg");
-                Uri outputFileUri = Uri.fromFile(tmpFile);
-                /*
-                 * 把上述的設定put進去！然後startActivityForResult,
-                 * 記住，因為是有ForResult，所以在本身自己的acitivy裡面等等要複寫onActivityResult
-                 * 稍後再說明onActivityResult
-                 */
-                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
-                startActivityForResult(intent, 0);
+//                //利用intent去開啟android本身的照相介面
+//                Intent intent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+//                //設定圖片的儲存位置，以及檔名
+//                File tmpFile = new File(Environment.getExternalStorageDirectory(), "image.jpg");
+//                Uri outputFileUri = Uri.fromFile(tmpFile);
+//                /*
+//                 * 把上述的設定put進去！然後startActivityForResult,
+//                 * 記住，因為是有ForResult，所以在本身自己的acitivy裡面等等要複寫onActivityResult
+//                 * 稍後再說明onActivityResult
+//                 */
+//                intent.putExtra(MediaStore.EXTRA_OUTPUT, outputFileUri);
+//                startActivityForResult(intent, 0);
+                Intent cameraIntent = new      Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
+                startActivityForResult(cameraIntent, 1887);
 
             }
 
@@ -110,10 +112,12 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        if (requestCode == 0) {
-            Bitmap image = (Bitmap) data.getExtras().get("data");
-            ImageView imageview = (ImageView) findViewById(R.id.img_face); //sets imageview as the bitmap
-            imageview.setImageBitmap(image);
+        if(resultCode != RESULT_CANCELED) {
+            if (requestCode == 1887) {
+                Bitmap image = (Bitmap) data.getExtras().get("data");
+                ImageView imageview = (ImageView) findViewById(R.id.img_face); //sets imageview as the bitmap
+                imageview.setImageBitmap(image);
+            }
         }
     }
 }
