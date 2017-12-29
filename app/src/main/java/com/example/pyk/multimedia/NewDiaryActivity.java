@@ -4,25 +4,39 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
+import android.widget.TextView;
 
 /**
  * Created by pyk on 12/26/17.
  */
 
 public class NewDiaryActivity extends AppCompatActivity {
+    String yy, mm, dd;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_newdiary);
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        //get date data
+        Bundle bundle = getIntent().getExtras();
+        yy = bundle.getString("year");
+        mm = bundle.getString("month");
+        dd = bundle.getString("day");
+        String date = yy + "/" + mm + "/" + dd;
 
+        TextView text_date = (TextView) findViewById(R.id.text_time);
+        text_date.setText(date);
+
+//        Log.d(yy,"newwwww year:");
         //mood dropdown list
         String[] str_mood = {"Anger", "Contempt", "Disgust", "Fear", "Happiness", "Sadness", "Surprise", "Neutral"};
         Spinner spinner_mood = (Spinner) findViewById(R.id.spinner_mood);

@@ -1,15 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:background="@color/bg_register"
     android:gravity="center"
     android:orientation="vertical"
-    android:padding="10dp" >
+    android:padding="10dp">
 
     <LinearLayout
         android:layout_width="fill_parent"
-        android:layout_height="453dp"
+        android:layout_height="500dp"
         android:layout_gravity="center"
         android:orientation="vertical"
         android:paddingLeft="20dp"
@@ -42,12 +45,6 @@
             android:textColorHint="@color/input_register_hint" />
 
         <!-- Login Button -->
-        <ImageView
-            android:id="@+id/img_face"
-            android:layout_width="180dp"
-            android:layout_height="120dp"
-            android:layout_marginLeft="100dp"
-            android:adjustViewBounds="false" />
 
         <Button
             android:id="@+id/btn_camera"
@@ -57,6 +54,23 @@
             android:background="@color/btn_login_bg"
             android:text="Upload Your Picture"
             android:textColor="@color/bg_login" />
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="178dp"
+            android:layout_marginTop="10dp">
+
+            <ImageView
+                android:id="@+id/img_face"
+                android:layout_width="202.5dp"
+                android:layout_height="270dp"
+                android:adjustViewBounds="false"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.459"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="MissingConstraints"
+                tools:layout_editor_absoluteY="0dp" />
+        </android.support.constraint.ConstraintLayout>
 
         <Button
             android:id="@+id/btn_register"
