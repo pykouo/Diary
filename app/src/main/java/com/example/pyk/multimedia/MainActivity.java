@@ -96,8 +96,10 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
-            return true;
+        if (id == R.id.logout) {
+            Intent i = new Intent(getApplicationContext(), LoginActivity.class);
+            startActivity(i);
+            finish();
         }
 
         return super.onOptionsItemSelected(item);
