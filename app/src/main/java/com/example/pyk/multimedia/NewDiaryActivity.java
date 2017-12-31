@@ -10,6 +10,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.Spinner;
 import android.widget.TextView;
 
@@ -32,8 +33,8 @@ public class NewDiaryActivity extends AppCompatActivity {
         mm = bundle.getString("month");
         dd = bundle.getString("day");
         String date = yy + "/" + mm + "/" + dd;
-
-        TextView text_date = (TextView) findViewById(R.id.text_time);
+        //set date to textview
+        final TextView text_date = (TextView) findViewById(R.id.text_time);
         text_date.setText(date);
 
 //        Log.d(yy,"newwwww year:");
@@ -54,7 +55,9 @@ public class NewDiaryActivity extends AppCompatActivity {
 
             @Override
             public void onClick(View v) {
-                // TODO Auto-generated method stub
+                EditText text_diary = (EditText) findViewById(R.id.text_diary);
+                //send text_diary to database and stored it
+                Log.d("diary content",text_diary.getText().toString());
                 Intent i = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(i);
             }
