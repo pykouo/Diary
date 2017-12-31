@@ -17,6 +17,8 @@ import android.widget.Toast;
 
 import model.User;
 import sql.DBHelper;
+//import com.microsoft.projectoxford.face.*;
+//import com.microsoft.projectoxford.face.contract.*;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
@@ -97,4 +99,6 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
+//    private FaceServiceClient faceServiceClient =
+//            new FaceServiceRestClient("https://westcentralus.api.cognitive.microsoft.com/face/v1.0", "d50af2ff232e4ac18deec83669d6a746");
 }
