@@ -1,6 +1,8 @@
 package com.example.pyk.multimedia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -16,10 +18,16 @@ import android.widget.TextView;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
+
+import model.Diary;
+import sql.DiaryController;
 
 public class MainActivity extends AppCompatActivity {
     //get your date
     public Integer yy, mm, dd;
+    private int user_id;
+    private final AppCompatActivity activity = MainActivity.this;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,16 +38,20 @@ public class MainActivity extends AppCompatActivity {
 //        ********************
 //        set your date to now
 //        ********************
+        DiaryController diaryController = new DiaryController(activity);
+        List<Diary> diaryList = diaryController.getAllDiary(user_id);
+        Log.d("di", "d" + diaryList.size());
         Date myDate = new Date();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(myDate);
         yy = calendar.get(Calendar.YEAR);
         mm = calendar.get(Calendar.MONTH) + 1;
         dd = calendar.get(Calendar.DATE); //Day of the month :)
-
+        user_id = getIntent().getIntExtra("id", 0);
         Log.d(yy.toString(), "year:");
         Log.d(mm.toString(), "month:");
         Log.d(dd.toString(), "day:");
+
 //        ********************
 //        click add button
 //        ********************
@@ -51,13 +63,15 @@ public class MainActivity extends AppCompatActivity {
 //                        .setAction("Action", null).show();
 //                deliver data to intent
                 Intent i = new Intent();
-                i.setClass(MainActivity.this,NewDiaryActivity.class);
+                i.setClass(MainActivity.this, NewDiaryActivity.class);
                 Bundle date = new Bundle();
-                date.putString("year",yy.toString());
-                date.putString("month",mm.toString());
-                date.putString("day",dd.toString());
+                date.putString("year", yy.toString());
+                date.putString("month", mm.toString());
+                date.putString("day", dd.toString());
+                date.putInt("id", user_id);
                 i.putExtras(date);
                 startActivity(i);
+                finish();
             }
         });
 
@@ -69,14 +83,8 @@ public class MainActivity extends AppCompatActivity {
         calendarView.setOnDateChangeListener(new CalendarView.OnDateChangeListener() {
             public void onSelectedDayChange(CalendarView view, int year, int month, int dayOfMonth) {
                 yy = year;
-                mm = month;
+                mm = month + 1;
                 dd = dayOfMonth;
-
-                //月份記得加一，因為一月是從0開始算
-                String date = year + "/" + (month + 1) + "/" + dayOfMonth;
-                Log.d(date, "date: [" + date + "]");
-                //傳送到下一頁
-
             }
         });
     }

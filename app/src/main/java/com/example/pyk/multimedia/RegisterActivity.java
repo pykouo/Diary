@@ -12,11 +12,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import model.User;
-import sql.DBHelper;
+import sql.UserController;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = RegisterActivity.this;
-    private DBHelper dbHelper;
+    private UserController userController;
 
     private TextView text_name, text_pwd;
     private ImageView face;
@@ -33,7 +33,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         text_pwd = findViewById(R.id.password);
         face = findViewById(R.id.img_face);
         // set dbhelper
-        dbHelper = new DBHelper(activity);
+        userController = new UserController(activity);
         backLogin.setOnClickListener(this);
         facecam.setOnClickListener(this);
         btn_register.setOnClickListener(this);
@@ -79,7 +79,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         User user = new User();
         user.setName(text_name.getText().toString());
         user.setPassword(text_pwd.getText().toString());
-        dbHelper.register(user);
+        userController.register(user);
         Intent i = new Intent(activity, LoginActivity.class);
         startActivity(i);
         finish();

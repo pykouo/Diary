@@ -12,62 +12,65 @@ import java.util.List;
 
 import model.User;
 
-/**
- * Created by pyk on 12/29/17.
- */
-//public class DBHelper extends SQLiteOpenHelper{
-//
-//    public DBHelper(Context context, String name,
-//                      SQLiteDatabase.CursorFactory factory, int version) {
-//        super(context, name, factory, version);
-//    }
-//
-//    @Override
-//    public void onCreate(SQLiteDatabase db) {
-//
-//    }
-//
-//    @Override
-//    public void onUpgrade(SQLiteDatabase db,
-//                          int oldVersion, int newVersion) {
-//
-//    }
-//}
-public class DBHelper extends SQLiteOpenHelper {
+public class UserController extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 1;
+    private static final int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "Diary.db";
 
     // User table name
     private static final String TABLE_USER = "users";
+    private static final String TABLE_DIARY = "diary";
 
     // User Table Columns names
     private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_USER_NAME = "user_name";
     private static final String COLUMN_USER_PASSWORD = "user_password";
 
+    //diary Table Columns names
+    private static final String COLUMN_DIARY_ID = "diary_id";
+    private static final String COLUMN_DATE = "date";
+    private static final String COLUMN_EMOTION = "emotion";
+    private static final String COLUMN_WEATHER = "weather";
+    private static final String COLUMN_CONTENT = "content";
+
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT," + COLUMN_USER_PASSWORD + " TEXT" + ")";
+            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT UNIQUE," + COLUMN_USER_PASSWORD + " TEXT" + ")";
 
     // drop table sql query
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
+
+
+    // create table sql query
+    private String CREATE_DIARY_TABLE = "CREATE TABLE " + TABLE_DIARY + "("
+            + COLUMN_DIARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
+            + COLUMN_DATE + " DATE,"
+            + COLUMN_EMOTION + " TEXT, "
+            + COLUMN_WEATHER + " TEXT, "
+            + COLUMN_CONTENT + " TEXT, "
+            + COLUMN_USER_ID + " INTEGER, "
+            +"FOREIGN KEY(user_id) REFERENCES users(user_id))";
+
+    // drop table sql query
+    private String DROP_DIARY_TABLE = "DROP TABLE IF EXISTS " + TABLE_DIARY;
+
 
     /**
      * Constructor
      *
      * @param context
      */
-    public DBHelper(Context context) {
+    public UserController(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
     @Override
     public void onCreate(SQLiteDatabase db) {
         db.execSQL(CREATE_USER_TABLE);
+        db.execSQL(CREATE_DIARY_TABLE);
     }
 
 
@@ -76,7 +79,7 @@ public class DBHelper extends SQLiteOpenHelper {
 
         //Drop User Table if exist
         db.execSQL(DROP_USER_TABLE);
-
+        db.execSQL(DROP_DIARY_TABLE);
         // Create tables again
         onCreate(db);
 
@@ -133,7 +136,7 @@ public class DBHelper extends SQLiteOpenHelper {
                 sortOrder); //The sort order
 
 
-        // Traversing through all rows and adding to list
+        //  through all rows and adding to list
         if (cursor.moveToFirst()) {
             do {
                 User user = new User();
@@ -185,7 +188,7 @@ public class DBHelper extends SQLiteOpenHelper {
     /**
      * This method to check user exist or not
      */
-    public boolean login(User user) {
+    public int login(User user) {
 
         // array of columns to fetch
         String[] columns = {
@@ -213,9 +216,13 @@ public class DBHelper extends SQLiteOpenHelper {
                 null);                      //The sort order
 
         int cursorCount = cursor.getCount();
-
+        int id = 0;
+        if (cursorCount > 0){
+            cursor.moveToFirst();
+            id = cursor.getInt(0);
+        }
         cursor.close();
         db.close();
-        return cursorCount > 0;
+        return id;
     }
 }

@@ -1,28 +1,23 @@
 package com.example.pyk.multimedia;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Bitmap;
-import android.support.design.widget.Snackbar;
-import android.support.design.widget.TextInputLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.AppCompatButton;
-import android.support.v7.widget.AppCompatTextView;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
-import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import model.User;
-import sql.DBHelper;
-//import com.microsoft.projectoxford.face.*;
-//import com.microsoft.projectoxford.face.contract.*;
+import sql.UserController;
 
 public class LoginActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = LoginActivity.this;
-    private DBHelper dbHelper;
+    private UserController userController;
 
     private TextView text_name, text_pwd;
 
@@ -35,7 +30,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
         // get password
         text_pwd = findViewById(R.id.password);
         // set dbhelper
-        dbHelper = new DBHelper(activity);
+        userController = new UserController(activity);
         // set btn
         Button btnlogin = findViewById(R.id.btnLogin);
         Button btnregister = findViewById(R.id.btnLinkToRegisterScreen);
@@ -73,19 +68,19 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Toast.makeText(activity, "Name is Empty", Toast.LENGTH_LONG).show();
             return;
         }
-        if(text_pwd.getText().toString().trim().isEmpty()){
+        if (text_pwd.getText().toString().trim().isEmpty()) {
             Toast.makeText(activity, "Password is Empty", Toast.LENGTH_LONG).show();
             return;
         }
         User user = new User();
         user.setName(text_name.getText().toString());
         user.setPassword(text_pwd.getText().toString());
-
-        if (dbHelper.login(user)) {
+        int user_id = userController.login(user);
+        if (user_id > 0) {
             Intent i = new Intent(activity, MainActivity.class);
-            //            accountsIntent.putExtra("EMAIL", textInputEditTextEmail.getText().toString().trim());
+            i.putExtra("id", user_id);
             startActivity(i);
-            finish();
+//            finish();
         } else {
             Toast.makeText(activity, "Login Failed", Toast.LENGTH_LONG).show();
         }
@@ -99,6 +94,4 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             }
         }
     }
-//    private FaceServiceClient faceServiceClient =
-//            new FaceServiceRestClient("https://westcentralus.api.cognitive.microsoft.com/face/v1.0", "d50af2ff232e4ac18deec83669d6a746");
 }
