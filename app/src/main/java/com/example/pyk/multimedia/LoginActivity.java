@@ -80,7 +80,7 @@ public class LoginActivity extends AppCompatActivity implements View.OnClickList
             Intent i = new Intent(activity, MainActivity.class);
             i.putExtra("id", user_id);
             startActivity(i);
-//            finish();
+            finish();
         } else {
             Toast.makeText(activity, "Login Failed", Toast.LENGTH_LONG).show();
         }

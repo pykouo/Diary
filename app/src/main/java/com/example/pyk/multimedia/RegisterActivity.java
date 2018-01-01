@@ -2,6 +2,7 @@ package com.example.pyk.multimedia;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.support.v7.app.AppCompatActivity;
@@ -11,16 +12,18 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.ByteArrayOutputStream;
+
 import model.User;
 import sql.UserController;
 
 public class RegisterActivity extends AppCompatActivity implements View.OnClickListener {
     private final AppCompatActivity activity = RegisterActivity.this;
-    private UserController userController;
+    public UserController userController;
 
-    private TextView text_name, text_pwd;
-    private ImageView face;
-
+    public TextView text_name, text_pwd;
+    public ImageView face;
+    public Bitmap image;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
 
@@ -33,7 +36,7 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
         text_pwd = findViewById(R.id.password);
         face = findViewById(R.id.img_face);
         // set dbhelper
-        userController = new UserController(activity);
+
         backLogin.setOnClickListener(this);
         facecam.setOnClickListener(this);
         btn_register.setOnClickListener(this);
@@ -68,17 +71,15 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
 
     private void verifyFromSQLite() {
 
-        if (text_name.getText().toString().trim().isEmpty()) {
-            Toast.makeText(activity, "Name is Empty", Toast.LENGTH_LONG).show();
-            return;
-        }
-        if (text_pwd.getText().toString().trim().isEmpty()) {
-            Toast.makeText(activity, "Password is Empty", Toast.LENGTH_LONG).show();
+        if (text_name.getText().toString().trim().isEmpty() || text_pwd.getText().toString().trim().isEmpty()) {
+            Toast.makeText(activity, "Every Input must filled", Toast.LENGTH_LONG).show();
             return;
         }
         User user = new User();
         user.setName(text_name.getText().toString());
         user.setPassword(text_pwd.getText().toString());
+        user.setImage(getBytes(image));
+        userController = new UserController(activity);
         userController.register(user);
         Intent i = new Intent(activity, LoginActivity.class);
         startActivity(i);
@@ -88,10 +89,22 @@ public class RegisterActivity extends AppCompatActivity implements View.OnClickL
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode != RESULT_CANCELED) {
             if (requestCode == 1887) {
-                Bitmap image = (Bitmap) data.getExtras().get("data");
+                image = (Bitmap) data.getExtras().get("data");
 //                Bitmap resized_image = Bitmap.createScaledBitmap(image, 180, 120, true);
                 face.setImageBitmap(image);
+//                TextView testface = findViewById(R.id.test);
+//                testface.setText(getBytes(image));
             }
         }
+    }
+    public static byte[] getBytes(Bitmap bitmap) {
+        ByteArrayOutputStream stream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.PNG, 0, stream);
+        return stream.toByteArray();
+    }
+
+    // convert from byte array to bitmap
+    public static Bitmap getImage(byte[] image) {
+        return BitmapFactory.decodeByteArray(image, 0, image.length);
     }
 }

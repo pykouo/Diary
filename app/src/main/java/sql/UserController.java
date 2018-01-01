@@ -15,7 +15,7 @@ import model.User;
 public class UserController extends SQLiteOpenHelper {
 
     // Database Version
-    private static final int DATABASE_VERSION = 2;
+    private static int DATABASE_VERSION = 2;
 
     // Database Name
     private static final String DATABASE_NAME = "Diary.db";
@@ -28,6 +28,8 @@ public class UserController extends SQLiteOpenHelper {
     private static final String COLUMN_USER_ID = "user_id";
     private static final String COLUMN_USER_NAME = "user_name";
     private static final String COLUMN_USER_PASSWORD = "user_password";
+    private static final String COLUMN_USER_IMAGE = "image";
+
 
     //diary Table Columns names
     private static final String COLUMN_DIARY_ID = "diary_id";
@@ -38,7 +40,10 @@ public class UserController extends SQLiteOpenHelper {
 
     // create table sql query
     private String CREATE_USER_TABLE = "CREATE TABLE " + TABLE_USER + "("
-            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT," + COLUMN_USER_NAME + " TEXT UNIQUE," + COLUMN_USER_PASSWORD + " TEXT" + ")";
+            + COLUMN_USER_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_USER_NAME + " TEXT UNIQUE, "
+            + COLUMN_USER_PASSWORD + " TEXT, "
+            + COLUMN_USER_IMAGE + " BLOB " + ")";
 
     // drop table sql query
     private String DROP_USER_TABLE = "DROP TABLE IF EXISTS " + TABLE_USER;
@@ -46,13 +51,13 @@ public class UserController extends SQLiteOpenHelper {
 
     // create table sql query
     private String CREATE_DIARY_TABLE = "CREATE TABLE " + TABLE_DIARY + "("
-            + COLUMN_DIARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT,"
-            + COLUMN_DATE + " DATE,"
+            + COLUMN_DIARY_ID + " INTEGER PRIMARY KEY AUTOINCREMENT, "
+            + COLUMN_DATE + " DATE UNIQUE, "
             + COLUMN_EMOTION + " TEXT, "
             + COLUMN_WEATHER + " TEXT, "
             + COLUMN_CONTENT + " TEXT, "
             + COLUMN_USER_ID + " INTEGER, "
-            +"FOREIGN KEY(user_id) REFERENCES users(user_id))";
+            + "FOREIGN KEY(user_id) REFERENCES users(user_id))";
 
     // drop table sql query
     private String DROP_DIARY_TABLE = "DROP TABLE IF EXISTS " + TABLE_DIARY;
@@ -69,20 +74,24 @@ public class UserController extends SQLiteOpenHelper {
 
     @Override
     public void onCreate(SQLiteDatabase db) {
+        db.execSQL(DROP_USER_TABLE);
+        db.execSQL(DROP_DIARY_TABLE);
         db.execSQL(CREATE_USER_TABLE);
         db.execSQL(CREATE_DIARY_TABLE);
+        Log.d("AAAAAAA", "AAAAAAAAAAAAA");
     }
 
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-
-        //Drop User Table if exist
-        db.execSQL(DROP_USER_TABLE);
-        db.execSQL(DROP_DIARY_TABLE);
-        // Create tables again
-        onCreate(db);
-
+        if (newVersion > oldVersion) {
+            //Drop User Table if exist
+            db.execSQL(DROP_USER_TABLE);
+            db.execSQL(DROP_DIARY_TABLE);
+            // Create tables again
+            onCreate(db);
+        }
+        DATABASE_VERSION++;
     }
 
     /**
@@ -96,6 +105,7 @@ public class UserController extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
+        values.put(COLUMN_USER_IMAGE, user.getImage());
 
         // Inserting Row
         db.insert(TABLE_USER, null, values);
@@ -112,11 +122,12 @@ public class UserController extends SQLiteOpenHelper {
         String[] columns = {
                 COLUMN_USER_ID,
                 COLUMN_USER_NAME,
-                COLUMN_USER_PASSWORD
+                COLUMN_USER_PASSWORD,
+                COLUMN_USER_IMAGE
         };
         // sorting orders
         String sortOrder =
-                COLUMN_USER_NAME + " ASC";
+                COLUMN_USER_ID + " ASC";
         List<User> userList = new ArrayList<User>();
 
         SQLiteDatabase db = this.getReadableDatabase();
@@ -143,6 +154,7 @@ public class UserController extends SQLiteOpenHelper {
                 user.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))));
                 user.setName(cursor.getString(cursor.getColumnIndex(COLUMN_USER_NAME)));
                 user.setPassword(cursor.getString(cursor.getColumnIndex(COLUMN_USER_PASSWORD)));
+                user.setImage(cursor.getBlob(cursor.getColumnIndex(COLUMN_USER_IMAGE)));
                 // Adding user record to list
                 userList.add(user);
             } while (cursor.moveToNext());
@@ -165,6 +177,7 @@ public class UserController extends SQLiteOpenHelper {
         ContentValues values = new ContentValues();
         values.put(COLUMN_USER_NAME, user.getName());
         values.put(COLUMN_USER_PASSWORD, user.getPassword());
+//        values.put(COLUMN_USER_IMAGE, user.getImage());
 
         // updating row
         db.update(TABLE_USER, values, COLUMN_USER_ID + " = ?",
@@ -217,12 +230,58 @@ public class UserController extends SQLiteOpenHelper {
 
         int cursorCount = cursor.getCount();
         int id = 0;
-        if (cursorCount > 0){
+        if (cursorCount > 0) {
             cursor.moveToFirst();
             id = cursor.getInt(0);
         }
         cursor.close();
         db.close();
         return id;
+    }
+
+    public List<User> faceLogin(User user) {
+
+        // array of columns to fetch
+        String[] columns = {
+                COLUMN_USER_ID,
+                COLUMN_USER_IMAGE
+        };
+        String sortOrder =
+                COLUMN_USER_ID + " ASC";
+        List<User> userList = new ArrayList<User>();
+
+        SQLiteDatabase db = this.getReadableDatabase();
+//        // selection criteria
+//        String selection = COLUMN_USER_IMAGE + " = ?";
+//
+//        // selection arguments
+//        String[] selectionArgs = {user.getImage()};
+
+        // query user table with conditions
+        /**
+         * Here query function is used to fetch records from user table this function works like we use sql query.
+         * SQL query equivalent to this query function is
+         * SELECT user_id FROM user WHERE user_email = 'jack@androidtutorialshub.com' AND user_password = 'qwerty';
+         */
+        Cursor cursor = db.query(TABLE_USER, //Table to query
+                columns,                    //columns to return
+                null,                  //columns for the WHERE clause
+                null,              //The values for the WHERE clause
+                null,                       //group the rows
+                null,                       //filter by row groups
+                sortOrder);                      //The sort order
+
+        if (cursor.moveToFirst()) {
+            do {
+                User userR = new User();
+                userR.setId(Integer.parseInt(cursor.getString(cursor.getColumnIndex(COLUMN_USER_ID))));
+                user.setImage(cursor.getBlob(cursor.getColumnIndex(COLUMN_USER_IMAGE)));
+                // Adding user record to list
+                userList.add(user);
+            } while (cursor.moveToNext());
+        }
+        cursor.close();
+        db.close();
+        return userList;
     }
 }

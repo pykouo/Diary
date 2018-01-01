@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.Blob;
+
 /**
  * Created by Connie on 2017/12/31.
  */
@@ -8,6 +10,7 @@ public class User {
     private int id;
     private String name;
     private String password;
+    private byte[] image;
 
     public int getId() {
         return id;
@@ -32,4 +35,13 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
+    }
+
 }
